@@ -65,17 +65,19 @@ class VexLexer(RegexLexer):
             vex_keywords,
             vex_types,
 
-            # Floats [todo: 0.000_000_001]
+            # Floats [todo, test 0.000_000_01]
             (r'[0-9]+\.[0-9]+([eE][-+]?[0-9]+)?', Number.Float),
+            #(r'[0-9]+\.(?:[0-9][0-9][0-9]_)+[0-9]+', Number.Float),
             #(r'[0-9]+\.?[eE][-+]?[0-9]+', Number.Float),
 
-            # Integers [todo: 1_000_000]
+            # Integers [todo, test 1_000_000]
             (r'0b[01]+', Number.Bin),
             (r'0x[0-9a-fA-F]+', Number.Hex),
             (r'[0-9]+', Number.Integer),
+            #(r'[0-9]+(?:_[0-9][0-9][0-9])+', Number.Integer),
 
             # Identifier
-            (r'@[a-zA-Z_]\w*', Name.Builtin),
+            (r'[fuvpi234sd]?@[a-zA-Z_]\w*', Name.Builtin),
             (r'[a-zA-Z_]\w*', Name),
             
             # Strings

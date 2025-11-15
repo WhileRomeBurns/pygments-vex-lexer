@@ -9,6 +9,9 @@ float result = `chs('some_expression')`;  // just to test the lexer
 * multi
 * line */
 
+int test_100 = 23_000_000;
+float float_001 = 0.000_000_24;
+
 // pointcloud lookup of positions, normals and distances
 float radius  = ch("radius");
 float radius2 = ch ( "radius" );
