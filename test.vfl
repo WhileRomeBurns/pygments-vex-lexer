@@ -1,0 +1,60 @@
+// input 1: v@vel field
+// input 2: points from a curve with N = tangent of curve
+
+/* cstyle */
+float result = `chs('some_expression')`;  // just to test the lexer
+
+// pointcloud lookup of positions, normals and distances
+float radius  = ch("radius");
+int   max_pts = chi('maxpts');
+
+int h = pcopen(@OpInput2, "P", @P, radius, max_pts);
+
+vector avgP = 0, nP = 0;
+vector avgN = 0, nN = 0;
+float  avgDist = 0, nDist = 0;
+int    sum = 0;
+
+while(pciterate(h)) {
+    pcimport(h, "P", nP);
+    avgP += nP;
+
+    pcimport(h, "N", nN);
+    avgN += nN;
+
+    pcimport(h, "point.distance", nDist);
+    avgDist += nDist;
+
+    sum++;
+    continue; // just to test the lexer
+}
+pcclose(h);
+
+if (sum == 0)
+    return;
+
+avgP    /= sum;
+avgN     = normalize(avgN);
+avgDist /= sum;
+
+// in addition to the tangent dir (avgN), we need to find a direction to orbit and attract
+vector attract = normalize(avgP - @P);
+vector orbit   = normalize(cross(avgN, attract));
+
+// fitting and remapping of vectors based on distance
+float dist_tangent = fit(avgDist, ch("min_dist_tangent"), ch("max_dist_tangent"), 0, 1);
+dist_tangent = chramp("remap_dist_tangent", dist_tangent);
+dist_tangent *= ch("scale_tangent");
+
+float dist_attract = fit(avgDist, ch("min_dist_attract"), ch("max_dist_attract"), 0, 1);
+dist_attract = chramp("remap_dist_attract", dist_attract);
+dist_attract *= ch("scale_attract");
+
+float dist_orbit = fit(avgDist, ch("min_dist_orbit"), ch("max_dist_orbit"), 0, 1);
+dist_orbit = chramp("remap_dist_orbit", dist_orbit);
+dist_orbit *= ch("scale_orbit");
+
+// final velocity
+v@vel = (avgN    * dist_tangent) +
+        (attract * dist_attract) +
+        (orbit   * dist_orbit  );
