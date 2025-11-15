@@ -3,16 +3,20 @@
 
 /* cstyle */
 float result = `chs('some_expression')`;  // just to test the lexer
+/* cstyle
+* multi
+* line */
 
 // pointcloud lookup of positions, normals and distances
 float radius  = ch("radius");
+float radius2 = ch ( "radius" );
 int   max_pts = chi('maxpts');
 
 int h = pcopen(@OpInput2, "P", @P, radius, max_pts);
 
 vector avgP = 0, nP = 0;
 vector avgN = 0, nN = 0;
-float  avgDist = 0, nDist = 0;
+float  avgDist = 0.0, nDist = 0.0;
 int    sum = 0;
 
 while(pciterate(h)) {

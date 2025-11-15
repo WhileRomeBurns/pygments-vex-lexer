@@ -44,11 +44,44 @@ class VexLexer(RegexLexer):
     url = ''
     version_added = '1.0'
 
+    vex_keywords = (words(VEX_KEYWORDS, suffix=r'\b'), Keyword.Reserved)
+    vex_types = (words(VEX_TYPES, suffix=r'\b'), Keyword.Type)
+    vex_functions = (words(VEX_FUNCTIONS, suffix=r'\b'), Keyword.Type)
+
     tokens = {
         'root': [
+            (r'\n', Whitespace),
+            (r'\s+', Whitespace),
+            (r'//.*?\n', Comment.Single),
+            (r'/\*', Comment.Multiline, 'comment-multiline'),
+
+            # Vex wrangles can inject expressions in backtick strings, macro-like
             (r'`', String, 'string-backtick'), # should be first, h-expression eval early
+            
+            # Keywords
+            vex_keywords,
+            vex_types,
+
+            # Floats [todo: 0.000_000_001]
+            (r'[0-9]+\.[0-9]+([eE][-+]?[0-9]+)?', Number.Float),
+            #(r'[0-9]+\.?[eE][-+]?[0-9]+', Number.Float),
+
+            # Integers [todo: 1_000_000]
+            (r'0b[01]+', Number.Bin),
+            (r'0x[0-9a-fA-F]+', Number.Hex),
+            (r'[0-9]+', Number.Integer),
+
+            # Identifier
+            (r'@[a-zA-Z_]\w*', Name.Builtin),
+            (r'[a-zA-Z_]\w*', Name),
+            
+            # Strings
             (r'"', String, 'string-double'),
             (r"'", String, 'string-single'),
+
+            # Operators, Punctuation
+            (r'[+%=><|^!?/\-*&~:]', Operator),
+            (r'[{}()\[\],.;]', Punctuation)
         ],
         'string-backtick': [
             (r'`', String, '#pop'),
@@ -62,39 +95,13 @@ class VexLexer(RegexLexer):
         'string-single': [
             (r"'", String, '#pop'),
             (r"[^']+?", String),
+        ],
+        'comment-multiline': [
+            (r'\*/', Comment.Multiline, '#pop'),
+            (r'[^*]+', Comment.Multiline),
+            (r'\*', Comment.Multiline),
         ]
-        # 'root': [
-        #     #(r"`([^`])*`", String.Backtick),
-        #     (r"`[^`]*`", String.Backtick),
-        #     #(r'`.*?`', String),
-        #     inherit,
-        # ],
-        # 'string': [
-        #     (r"`", String, '#push'),
-        #     (r"`", String, '#pop')
-        #     #(r'`.*?`', String),
-        # ],
-        # 'string': [
-        #     (r"`", String.Other, '#push'),
-        #     (r"`", String.Other, '#pop')
-        # ],
     }
-    # tokens = {
-    #     'comment': [
-    #         (r"'", Comment.Multiline, '#push'),
-    #         (r"'", Comment.Multiline, '#pop')
-    #     ]
-    # }
-
-    # function_qualifiers = {'__device__', '__global__', '__host__',
-    #                        '__noinline__', '__forceinline__'}
-    # variable_qualifiers = {'__device__', '__constant__', '__shared__',
-    #                        '__restrict__'}
-    #variables = {'gridDim', 'blockIdx', 'blockDim', 'threadIdx', 'warpSize'}
-    # functions = {'normalize', 'fit', 'fit01',
-    #              'ch', 'chramp', 'pciterate',
-    #              'pcopen'}
-    # execution_confs = {'<<<', '>>>'}
 
     def get_tokens_unprocessed(self, text, stack=('root',)):
 
@@ -103,17 +110,8 @@ class VexLexer(RegexLexer):
             # if token is String:
             #     print(value)
             if token is Name:
-                #if value in self.variable_qualifiers:
-                #    token = Keyword.Type
-                if value in VEX_TYPES:
-                    token = Keyword.Type
-                #elif value in self.variables:
-                #    token = Name.Builtin
-                #elif value in self.execution_confs:
-                #    token = Keyword.Pseudo
-                #elif value in self.function_qualifiers:
-                #    token = Keyword.Reserved
-                elif value in VEX_FUNCTIONS:
+                print(value)
+                if value in VEX_FUNCTIONS:
                     token = Name.Function
             yield index, token, value
 
