@@ -4,7 +4,7 @@ import re
 import subprocess
 import json
 
-VCC_PATH  = 'C:/Program Files/Side Effects Software/Houdini 20.5.278/bin/vcc.exe'
+VCC_PATH  = 'C:/Program Files/Side Effects Software/Houdini 21.0.440/bin/vcc.exe'
 SYN_PATH  = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.')
 COMP_PATH = os.path.join(SYN_PATH, 'VEX.sublime-completions')
 FUNC_PATH = os.path.join(SYN_PATH, 'VexFunctions.txt')

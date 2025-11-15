@@ -1,6 +1,8 @@
 // input 1: v@vel field
 // input 2: points from a curve with N = tangent of curve
 
+#define pi 3.14
+
 /* cstyle */
 float result = `chs('some_expression')`;  // just to test the lexer
 /* cstyle

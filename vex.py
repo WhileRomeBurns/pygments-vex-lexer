@@ -47,11 +47,14 @@ class VexLexer(RegexLexer):
     vex_keywords = (words(VEX_KEYWORDS, suffix=r'\b'), Keyword.Reserved)
     vex_types = (words(VEX_TYPES, suffix=r'\b'), Keyword.Type)
     vex_functions = (words(VEX_FUNCTIONS, suffix=r'\b'), Keyword.Type)
+    # vex_preprocessor = (words(VEX_PREPROCESSOR, prefix=r'^#', suffix=r'.*?\n'), Comment.Preproc)
 
     tokens = {
         'root': [
             (r'\n', Whitespace),
             (r'\s+', Whitespace),
+            (r'^#.*?\n', Comment.Preproc),
+
             (r'//.*?\n', Comment.Single),
             (r'/\*', Comment.Multiline, 'comment-multiline'),
 
@@ -80,7 +83,7 @@ class VexLexer(RegexLexer):
             (r"'", String, 'string-single'),
 
             # Operators, Punctuation
-            (r'[+%=><|^!?/\-*&~:]', Operator),
+            (r'[+%=><|^!?/\-*&~:@]', Operator),
             (r'[{}()\[\],.;]', Punctuation)
         ],
         'string-backtick': [

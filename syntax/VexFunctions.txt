@@ -27,6 +27,8 @@ agentclipcatalog
 agentclipchannel
 agentclipchannelnames
 agentcliplayerblend
+agentcliplayersamplelocal
+agentcliplayersampleworld
 agentcliplength
 agentclipnames
 agentclipsample
@@ -452,6 +454,8 @@ matchvex_specular
 mattrib
 max
 mdensity
+medulla_diffuse
+medulla_henyeygreenstein
 metadata
 metaimport
 metamarch
@@ -511,6 +515,7 @@ ocio_roles
 ocio_spaces
 ocio_transform
 ocio_transformview
+ocio_transformviewreverse
 onoise
 opdigits
 opend
@@ -530,6 +535,7 @@ ord
 orthographic
 osd_facecount
 osd_firstpatch
+osd_limit
 osd_limitsurface
 osd_limitsurfacevertex
 osd_lookupface
@@ -598,6 +604,7 @@ pointhedgenext
 pointlocaltransforms
 pointname
 pointprims
+pointprimuv
 pointtransform
 pointtransformrigid
 pointtransforms
@@ -645,6 +652,8 @@ ptransform
 push
 pxnoise
 pxnoised
+py_dumps
+py_loads
 qconvert
 qdistance
 qinvert
@@ -787,6 +796,7 @@ setvertexpoint
 shadow
 shadow_light
 shadowmap
+sheen
 shimport
 shl
 shr
