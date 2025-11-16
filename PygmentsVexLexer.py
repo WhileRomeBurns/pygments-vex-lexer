@@ -2,6 +2,7 @@
     Pygments Lexer for Side Effects Software's Vex and Vex Wrangle source.
 """
 __author__  = "Shawn Lipowski"
+__email__   = "vfxcodeblog@gmail.com"
 __date__    = "2025-11-16"
 __version__ = "1.0.0"
 __license__ = "MIT"
