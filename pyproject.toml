@@ -1,0 +1,16 @@
+[build-system]
+requires = ["flit_core >=3.11,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "PygmentsVexLexer"
+authors = [{name = "Shawn Lipowski", email = "vfxcodeblog@gmail.com"}]
+license = "MIT"
+license-files = ["LICENSE"]
+dynamic = ["version", "description"]
+
+[project.urls]
+Home = "https://github.com/WhileRomeBurns/pygments-vex-lexer"
+
+[project.entry-points."pygments.lexers"]
+PygmentsVexLexer = "PygmentsVexLexer:VexLexer"
