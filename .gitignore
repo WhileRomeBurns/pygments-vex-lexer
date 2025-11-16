@@ -1,2 +1,7 @@
+build/
+dist/
+__pycache__/
+
 *.html
 *.css
+*.code-workspace
