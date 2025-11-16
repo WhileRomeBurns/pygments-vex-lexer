@@ -1,23 +1,24 @@
 """
     Pygments Lexer for Side Effects Software's Vex and Vex Wrangle source.
-
-    :author: Shawn Lipowski
-    :date: 2025-11-16
-    :license: MIT, see LICENSE for details.
 """
+__author__  = "Shawn Lipowski"
+__date__    = "2025-11-16"
+__version__ = "1.0.0"
+__license__ = "MIT"
+
+
 import os
 import re
 
-from pygments.lexer import RegexLexer, bygroups, inherit, words, default
+from pygments.lexer import RegexLexer, bygroups, words
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Whitespace
-
-__all__ = ['VexLexer']
 
 try:
     __file__
 except NameError:
     __file__ = 'vex.py' # for vscode dev
+
 
 _ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'syntax')
 
@@ -36,16 +37,17 @@ with open(os.path.join(_ROOT, "VexConstants.txt")) as f:
 with open(os.path.join(_ROOT, "VexContexts.txt")) as f:
     VEX_CONTEXTS = f.read().split()
 
+
 class VexLexer(RegexLexer):
     """
     Lexer for Side Effects Software's Vex and Vex Wrangle source.
     """
-    name = 'VexLexer'
+    name = 'Vex'
     filenames = ['*.vfl', '*.vex', '*.h']
     aliases = ['vfl', 'vex', 'vexwrangle']
     mimetypes = ['text/vex']
     url = 'https://www.sidefx.com/'
-    version_added = '1.0'
+    version_added = '1.0.0'
 
     vex_keywords = (words(VEX_KEYWORDS, suffix=r'\b'), Keyword.Reserved)
     vex_types = (words(VEX_TYPES, suffix=r'\b'), Keyword.Type)
