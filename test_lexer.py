@@ -2,7 +2,7 @@ from pygments import highlight
 from pygments.formatters import HtmlFormatter
 from pygments.lexers import load_lexer_from_file
 
-lexer = load_lexer_from_file("VexLexer.py", lexername="VexLexer")
+lexer = load_lexer_from_file("PygmentsVexLexer.py", lexername="VexLexer")
 formatter = HtmlFormatter(style='default', full=True, linenos=True)
 #formatter = HtmlFormatter(style='monokai', full=True, linenos=True)
 
