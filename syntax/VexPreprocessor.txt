@@ -1,11 +1,12 @@
 #define
 #else
+#elif
 #endif
 #if
 #ifdef
 #ifndef
 #include
-#includeal
+#includeall
 #pragma
 #sinclude
 #undef

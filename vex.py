@@ -1,5 +1,9 @@
 """
-    Vex Lexer
+    Pygments Lexer for Side Effects Software's Vex and Vex Wrangle source.
+
+    :author: Shawn Lipowski
+    :date: 2025-11-16
+    :license: MIT, see LICENSE for details.
 """
 import os
 import re
@@ -8,10 +12,12 @@ from pygments.lexer import RegexLexer, bygroups, inherit, words, default
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Whitespace
 
+__all__ = ['VexLexer']
+
 try:
     __file__
 except NameError:
-    __file__ = 'vex.py'
+    __file__ = 'vex.py' # for vscode dev
 
 _ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'syntax')
 
@@ -23,6 +29,8 @@ with open(os.path.join(_ROOT, "VexTypes.txt")) as f:
     VEX_TYPES = f.read().split()
 with open(os.path.join(_ROOT, "VexPredefined.txt")) as f:
     VEX_PREDEFINED = f.read().split()
+with open(os.path.join(_ROOT, "VexPreprocessor.txt")) as f:
+    VEX_PREPROCESSOR = f.read().split()
 with open(os.path.join(_ROOT, "VexConstants.txt")) as f:
     VEX_CONSTANTS = f.read().split()
 with open(os.path.join(_ROOT, "VexContexts.txt")) as f:
@@ -30,19 +38,20 @@ with open(os.path.join(_ROOT, "VexContexts.txt")) as f:
 
 class VexLexer(RegexLexer):
     """
-    For Side Effects Vex source.
+    Lexer for Side Effects Software's Vex and Vex Wrangle source.
     """
     name = 'VexLexer'
-    filenames = ['*.vfl', '*.vex']
-    aliases = ['vfl', 'vex']
+    filenames = ['*.vfl', '*.vex', '*.h']
+    aliases = ['vfl', 'vex', 'vexwrangle']
     mimetypes = ['text/vex']
-    url = ''
+    url = 'https://www.sidefx.com/'
     version_added = '1.0'
 
     vex_keywords = (words(VEX_KEYWORDS, suffix=r'\b'), Keyword.Reserved)
     vex_types = (words(VEX_TYPES, suffix=r'\b'), Keyword.Type)
     vex_functions = (words(VEX_FUNCTIONS, suffix=r'\b(\s)*?(\()'), bygroups(Name.Function, Whitespace, Punctuation))
-    vex_predefined = (words(VEX_PREDEFINED, suffix=r'\b'), Name.Builtin)
+    vex_predefined = (words(VEX_PREDEFINED, suffix=r'\b'), Name.Variable.Magic)
+    vex_preprocessor = (words(VEX_PREPROCESSOR, suffix=r'\b'), Comment.Preproc)
     vex_constants = (words(VEX_CONSTANTS, suffix=r'\b'), Name.Constant)
     vex_contexts = (words(VEX_CONTEXTS, suffix=r'\b'), Keyword.Namespace)
 
@@ -50,21 +59,21 @@ class VexLexer(RegexLexer):
         'root': [
             (r'\n', Whitespace),
             (r'\s+', Whitespace),
-            (r'^#.*?\n', Comment.Preproc),
 
+            # Comments
             (r'//.*?\n', Comment.Single),
             (r'/\*', Comment.Multiline, 'comment-multiline'),
 
-            # Backtick Expression Strings
+            # Expression Strings (wrangle string replacement)
             (r'`', String, 'string-backtick'),
             
-            # Keywords
+            # Keywords and Types
             vex_keywords,
             vex_types,
-            #vex_functions,
             vex_predefined,
             vex_constants,
             vex_contexts,
+            vex_preprocessor,
 
             # Floats
             (r'[0-9]+\.(?:[0-9][0-9][0-9]_)+[0-9]+', Number.Float),
@@ -77,9 +86,11 @@ class VexLexer(RegexLexer):
             (r'[0-9]+(?:_[0-9][0-9][0-9])+', Number.Integer),
             (r'[0-9]+(?:[eE][-+]?[0-9]+)?', Number.Integer),
 
-            # Identifier, match bindings like v[]@ and v@ first and then known types @
-            (r'[fuvpi234sd]+(?:\[\])?@[a-zA-Z_]\w*', Name.Builtin),
-            (r'@[a-zA-Z_]\w*', Name.Builtin),
+            # Wrangle Binding Identifier
+            (r'[fuvpi234sd]+(?:\[\])?@[a-zA-Z_]\w*', Name.Variable),
+            (r'@[a-zA-Z_]\w*', Name.Variable),
+
+            # Identifier
             (r'[a-zA-Z_]\w*', Name),
             
             # Strings
@@ -87,19 +98,20 @@ class VexLexer(RegexLexer):
             (r"'", String, 'string-single'),
 
             # Operators, Punctuation
-            (r'[+%=><|^!?/\-*&~:@]', Operator),
+            (r'[+%=><|^!?/\-*&~:@\\]', Operator),
             (r'[{}()\[\],.;]', Punctuation)
         ],
         'string-backtick': [
             (r'`', String, '#pop'),
             (r'[^`]+?', String),
-            #(r'[^`]+?', String),
         ],
         'string-double': [
+            (r'\\"', String), # escape
             (r'"', String, '#pop'),
             (r'[^"]+?', String),
         ],
         'string-single': [
+            (r"\\'", String), # escape
             (r"'", String, '#pop'),
             (r"[^']+?", String),
         ],
@@ -117,7 +129,6 @@ class VexLexer(RegexLexer):
                 if value in VEX_FUNCTIONS:
                     start = index + len(value)
                     if start < len(text):
-                        match = re.match(r'\s*?\(', text[start:])
-                        if match:
+                        if re.match(r'\s*?\(', text[start:]):
                             token = Name.Function
             yield index, token, value
