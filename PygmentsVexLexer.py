@@ -1,5 +1,7 @@
 """
-    Pygments Lexer for Side Effects Software's Vex and Vex Wrangle source.
+    Pygments Lexer for Side Effects Software's Vex and Vex Wrangle source code.
+    Function names were generated for Houdini 21 via the vcc compiler. See
+    /syntax/syntax.py for details.
 """
 __author__  = "Shawn Lipowski"
 __email__   = "vfxcodeblog@gmail.com"
@@ -18,7 +20,7 @@ from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
 try:
     __file__
 except NameError:
-    __file__ = 'vex.py' # for vscode dev
+    __file__ = 'PygmentsVexLexer.py' # for vscode dev
 
 
 _ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'syntax')
@@ -79,10 +81,12 @@ class VexLexer(RegexLexer):
             vex_preprocessor,
 
             # Floats
+            (r'[0-9]+\.f', Number.Float),
+            (r'[0-9]+\.[0-9]+f', Number.Float),
             (r'[0-9]+\.(?:[0-9][0-9][0-9]_)+[0-9]+', Number.Float),
             (r'[0-9]+\.(?:[eE][-+]?[0-9]+)?', Number.Float),
             (r'[0-9]+\.[0-9]+(?:[eE][-+]?[0-9]+)?', Number.Float),
-            
+
             # Integers
             (r'0b[01]+', Number.Bin),
             (r'0x[0-9a-fA-F]+', Number.Hex),

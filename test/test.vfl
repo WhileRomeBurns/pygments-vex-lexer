@@ -1,47 +1,47 @@
-// input 1: v@vel field
-// input 2: points from a curve with N = tangent of curve
+#include "test.h"
 
 #define pi 3.14
-#define VOP_FADE_PERIODIC(v1, v0, average, fwidth)	\
+#define FADE_PERIODIC(v1, v0, average, fwidth)	\
 	    lerp((v1-v0)/fwidth, average, clamp(fwidth*VOP_PERIOD_FADE, 0, 1));
 
-#include "pbr.h"
-
-cvex henyeygreenstein_eval(example, input) {
-    return;
-}
-
-float
-vop_grandom(float u0, u1; float sigma)
+float vop_grandom(float u0, u1; float sigma)
 {
-    return cos(u0 * (M_PI*2)) * sqrt(-2 * log(u1)) * sigma;
+    return cos(u0 * (M_PI * 2)) * sqrt(-2 * log(u1)) * sigma;
 }
 
-int    sum = int(0);
-int    sum2 = 12e4; // 12 * 10^4 = 120000
-float b = 22.E+3; // 22 * 10^3 = 22000
-float c = 22.E-3; // 22 * 10^-3 = 0.022
-float d = 1.3e+3; // 1.3 * 10^3 = 1300
-s@test = "\"'test'\""; // test = "'test'"
+int   a = int(1.0); // casting
+int   b = 12e4;     // 12 * 10^4 = 120000
+float c = 22.E+3;   // 22 * 10^3 = 22000
+float d = 22.E-3;   // 22 * 10^-3 = 0.022
+float e = 1.3e+3;   // 1.3 * 10^3 = 1300
 
-float e = M_PI;
+int   test_100  = 23_000_000;
+float float_001 = 0.000_000_24;
 
-sum(4, 5);
-printf("Starting shader %s at %s", __FILE__, __DATE__);
+s@test = "\"'test'\""; // test string escapes
+i[]@connected_pts = neighbours(0, @ptnum);
+f@test_float  = 1234.0f;
+f@test_float2 = 1234.f;
+i@test_hex    = 0xf123;
+i@test_bin    = 0b1001;
+
+float f = M_PI;
+float g = sum(4, 5);
+
+printf("%s %s", __FILE__, __DATE__);
+
+float result = `chs('some_expression')`;  // expression string injection in wrangle
 
 /* cstyle */
-float result = `chs('some_expression')`;  // just to test the lexer
+
 /* cstyle
 * multi
 * line */
 
-int test_100 = 23_000_000;
-float float_001 = 0.000_000_24;
-i[]@connected_pts = neighbours(0, @ptnum);
+// single line comment //
 
-// pointcloud lookup of positions, normals and distances
-float radius  = ch("radius");
-float radius2 = ch ( "radius" );
+float radius = ch("radius");
+float radius2 = ch ("radius");
 int   max_pts = chi('maxpts');
 
 int h = pcopen(@OpInput2, "P", @P, radius, max_pts);
@@ -61,9 +61,14 @@ while(pciterate(h)) {
     avgDist += nDist;
 
     sum++;
-    continue; // just to test the lexer
+    continue;
 }
 pcclose(h);
+
+int values[] = {1, 2, 3, 4};
+foreach(int v; values) {
+    break;
+}
 
 if (sum == 0)
     return;
@@ -89,7 +94,6 @@ float dist_orbit = fit(avgDist, ch("min_dist_orbit"), ch("max_dist_orbit"), 0, 1
 dist_orbit = chramp("remap_dist_orbit", dist_orbit);
 dist_orbit *= ch("scale_orbit");
 
-// final velocity
 v@vel = (avgN    * dist_tangent) +
         (attract * dist_attract) +
         (orbit   * dist_orbit  );
