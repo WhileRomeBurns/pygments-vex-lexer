@@ -2,6 +2,31 @@
 // input 2: points from a curve with N = tangent of curve
 
 #define pi 3.14
+#define VOP_FADE_PERIODIC(v1, v0, average, fwidth)	\
+	    lerp((v1-v0)/fwidth, average, clamp(fwidth*VOP_PERIOD_FADE, 0, 1));
+
+#include "pbr.h"
+
+cvex henyeygreenstein_eval(example, input) {
+    return;
+}
+
+float
+vop_grandom(float u0, u1; float sigma)
+{
+    return cos(u0 * (M_PI*2)) * sqrt(-2 * log(u1)) * sigma;
+}
+
+int    sum = int(0);
+int    sum2 = 12e4; // 12 * 10^4 = 120000
+float b = 22.E+3; // 22 * 10^3 = 22000
+float c = 22.E-3; // 22 * 10^-3 = 0.022
+float d = 1.3e+3; // 1.3 * 10^3 = 1300
+
+float e = M_PI;
+
+sum(4, 5);
+printf("Starting shader %s at %s", __FILE__, __DATE__);
 
 /* cstyle */
 float result = `chs('some_expression')`;  // just to test the lexer
@@ -11,6 +36,7 @@ float result = `chs('some_expression')`;  // just to test the lexer
 
 int test_100 = 23_000_000;
 float float_001 = 0.000_000_24;
+i[]@connected_pts = neighbours(0, @ptnum);
 
 // pointcloud lookup of positions, normals and distances
 float radius  = ch("radius");
@@ -22,7 +48,6 @@ int h = pcopen(@OpInput2, "P", @P, radius, max_pts);
 vector avgP = 0, nP = 0;
 vector avgN = 0, nN = 0;
 float  avgDist = 0.0, nDist = 0.0;
-int    sum = 0;
 
 while(pciterate(h)) {
     pcimport(h, "P", nP);
