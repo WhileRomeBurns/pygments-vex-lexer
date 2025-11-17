@@ -1,8 +1,16 @@
+import os
+import sys
+
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import load_lexer_from_file
 
-lexer = load_lexer_from_file("PygmentsVexLexer.py", lexername="VexLexer")
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+import PygmentsVexLexer
+
+
+lexer = PygmentsVexLexer.VexLexer()
 formatter = HtmlFormatter(style='default', full=True, linenos=True)
 #formatter = HtmlFormatter(style='monokai', full=True, linenos=True)
 

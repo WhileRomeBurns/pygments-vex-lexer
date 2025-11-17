@@ -14,7 +14,7 @@ import re
 import subprocess
 
 VCC_PATH  = 'C:/Program Files/Side Effects Software/Houdini 21.0.440/bin/vcc.exe'
-SYN_PATH  = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.')
+SYN_PATH  = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../PygmentsVexLexer/syntax')
 FUNC_PATH = os.path.join(SYN_PATH, 'VexFunctions.txt')
 
 def contexts(vcc_path=VCC_PATH):

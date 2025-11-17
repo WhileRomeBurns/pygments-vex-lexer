@@ -6,7 +6,7 @@
 __author__  = "Shawn Lipowski"
 __email__   = "vfxcodeblog@gmail.com"
 __date__    = "2025-11-16"
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 __license__ = "MIT"
 
 
@@ -16,11 +16,6 @@ import re
 from pygments.lexer import RegexLexer, bygroups, words
 from pygments.token import Text, Comment, Operator, Keyword, Name, String, \
     Number, Punctuation, Whitespace
-
-try:
-    __file__
-except NameError:
-    __file__ = 'PygmentsVexLexer.py' # for vscode dev
 
 
 _ROOT = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'syntax')
